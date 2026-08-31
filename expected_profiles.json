@@ -1,0 +1,374 @@
+{
+    "resume_01_sarah_johnson.pdf": {
+        "name": "Sarah Johnson",
+        "email": "sarah.johnson@example.com",
+        "phone": "+91 9876543210",
+        "education": [
+            "M.S. Computer Science",
+            "ABC University",
+            "2024",
+            "B.Tech Computer Science",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "Java",
+            "SQL",
+            "Machine Learning",
+            "TensorFlow",
+            "Pandas",
+            "NumPy",
+            "AWS"
+        ],
+        "experience": [
+            "Software Engineer",
+            "ABC Technologies",
+            "2024 - Present",
+            "Developed machine learning applications using Python and SQL.",
+            "Data Science Intern",
+            "XYZ Analytics",
+            "2022 - 2024",
+            "Worked on data analysis and machine learning projects."
+        ],
+        "certifications": [
+            "AWS Certified Cloud Practitioner",
+            "Python for Data Science"
+        ],
+        "projects": [
+            "AI Recruitment System",
+            "Developed an AI-based system for resume screening and candidate matching.",
+            "Sales Prediction System",
+            "Built a machine learning model to predict sales using Python."
+        ]
+    },
+    "resume_01_sarah_johnson.docx": {
+        "name": "Sarah Johnson",
+        "email": "sarah.johnson@example.com",
+        "phone": "+91 9876543210",
+        "education": [
+            "M.S. Computer Science",
+            "ABC University",
+            "2024",
+            "B.Tech Computer Science",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "Java",
+            "SQL",
+            "Machine Learning",
+            "TensorFlow",
+            "Pandas",
+            "NumPy",
+            "AWS"
+        ],
+        "experience": [
+            "Software Engineer",
+            "ABC Technologies",
+            "2024 - Present",
+            "Developed machine learning applications using Python and SQL.",
+            "Data Science Intern",
+            "XYZ Analytics",
+            "2022 - 2024",
+            "Worked on data analysis and machine learning projects."
+        ],
+        "certifications": [
+            "AWS Certified Cloud Practitioner",
+            "Python for Data Science"
+        ],
+        "projects": [
+            "AI Recruitment System",
+            "Developed an AI-based system for resume screening and candidate matching.",
+            "Sales Prediction System",
+            "Built a machine learning model to predict sales using Python."
+        ]
+    },
+    "resume_02_rahul_mehta.pdf": {
+        "name": "Rahul Mehta",
+        "email": "rahul.mehta@example.com",
+        "phone": "+91 9812345678",
+        "education": [
+            "B.Tech Information Technology",
+            "Delhi Institute of Technology",
+            "2023"
+        ],
+        "skills": [
+            "Python",
+            "C++",
+            "JavaScript",
+            "React",
+            "Node.js",
+            "SQL",
+            "Git",
+            "GitHub",
+            "Docker"
+        ],
+        "experience": [
+            "Software Developer",
+            "TechNova Solutions",
+            "2023 - Present",
+            "Built web applications and REST APIs using Python and JavaScript.",
+            "Developer Intern",
+            "WebWorks",
+            "2022 - 2023",
+            "Developed React interfaces and worked with SQL databases."
+        ],
+        "certifications": [
+            "AWS Certified Cloud Practitioner",
+            "Python for Data Science"
+        ],
+        "projects": [
+            "E-Commerce Platform",
+            "Built a full-stack shopping platform using React, Node.js and SQL.",
+            "Expense Tracker",
+            "Created a Python application for personal finance tracking."
+        ]
+    },
+    "resume_02_rahul_mehta.docx": {
+        "name": "Rahul Mehta",
+        "email": "rahul.mehta@example.com",
+        "phone": "+91 9812345678",
+        "education": [
+            "B.Tech Information Technology",
+            "Delhi Institute of Technology",
+            "2023"
+        ],
+        "skills": [
+            "Python",
+            "C++",
+            "JavaScript",
+            "React",
+            "Node.js",
+            "SQL",
+            "Git",
+            "GitHub",
+            "Docker"
+        ],
+        "experience": [
+            "Software Developer",
+            "TechNova Solutions",
+            "2023 - Present",
+            "Built web applications and REST APIs using Python and JavaScript.",
+            "Developer Intern",
+            "WebWorks",
+            "2022 - 2023",
+            "Developed React interfaces and worked with SQL databases."
+        ],
+        "certifications": [
+            "AWS Certified Cloud Practitioner",
+            "Python for Data Science"
+        ],
+        "projects": [
+            "E-Commerce Platform",
+            "Built a full-stack shopping platform using React, Node.js and SQL.",
+            "Expense Tracker",
+            "Created a Python application for personal finance tracking."
+        ]
+    },
+    "resume_03_ananya_verma.pdf": {
+        "name": "Ananya Verma",
+        "email": "ananya.verma@example.com",
+        "phone": "+91 9765432109",
+        "education": [
+            "B.Tech Computer Science",
+            "National Engineering College",
+            "2024"
+        ],
+        "skills": [
+            "Python",
+            "SQL",
+            "Data Science",
+            "Data Analysis",
+            "Scikit-learn",
+            "Matplotlib"
+        ],
+        "experience": [
+            "Data Analyst",
+            "Insight Labs",
+            "2024 - Present",
+            "Created dashboards and analyzed business datasets.",
+            "Intern",
+            "DataWorks",
+            "2023 - 2024",
+            "Performed exploratory data analysis."
+        ],
+        "certifications": [
+            "Google Data Analytics Certificate"
+        ],
+        "projects": [
+            "Customer Churn Prediction",
+            "Built a machine learning model for customer churn analysis.",
+            "Sales Dashboard",
+            "Created an interactive dashboard for sales analytics."
+        ]
+    },
+    "resume_03_ananya_verma.docx": {
+        "name": "Ananya Verma",
+        "email": "ananya.verma@example.com",
+        "phone": "+91 9765432109",
+        "education": [
+            "B.Tech Computer Science",
+            "National Engineering College",
+            "2024"
+        ],
+        "skills": [
+            "Python",
+            "SQL",
+            "Data Science",
+            "Data Analysis",
+            "Scikit-learn",
+            "Matplotlib"
+        ],
+        "experience": [
+            "Data Analyst",
+            "Insight Labs",
+            "2024 - Present",
+            "Created dashboards and analyzed business datasets.",
+            "Intern",
+            "DataWorks",
+            "2023 - 2024",
+            "Performed exploratory data analysis."
+        ],
+        "certifications": [
+            "Google Data Analytics Certificate"
+        ],
+        "projects": [
+            "Customer Churn Prediction",
+            "Built a machine learning model for customer churn analysis.",
+            "Sales Dashboard",
+            "Created an interactive dashboard for sales analytics."
+        ]
+    },
+    "resume_04_vikram_singh.pdf": {
+        "name": "Vikram Singh",
+        "email": "vikram.singh@example.com",
+        "phone": "+91 9000012345",
+        "education": [
+            "Master of Computer Applications",
+            "North Valley University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "SQL",
+            "NLP",
+            "Deep Learning",
+            "PyTorch",
+            "Power BI"
+        ],
+        "experience": [
+            "ML Engineer",
+            "Future AI Labs",
+            "2022 - Present",
+            "Worked on NLP and deep learning solutions."
+        ],
+        "certifications": [
+            "Microsoft Azure Fundamentals"
+        ],
+        "projects": [
+            "Resume Analyzer",
+            "Designed a prototype for extracting information from resumes.",
+            "Chatbot",
+            "Developed a conversational assistant for customer support."
+        ]
+    },
+    "resume_04_vikram_singh.docx": {
+        "name": "Vikram Singh",
+        "email": "vikram.singh@example.com",
+        "phone": "+91 9000012345",
+        "education": [
+            "Master of Computer Applications",
+            "North Valley University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "SQL",
+            "NLP",
+            "Deep Learning",
+            "PyTorch",
+            "Power BI"
+        ],
+        "experience": [
+            "ML Engineer",
+            "Future AI Labs",
+            "2022 - Present",
+            "Worked on NLP and deep learning solutions."
+        ],
+        "certifications": [
+            "Microsoft Azure Fundamentals"
+        ],
+        "projects": [
+            "Resume Analyzer",
+            "Designed a prototype for extracting information from resumes.",
+            "Chatbot",
+            "Developed a conversational assistant for customer support."
+        ]
+    },
+    "resume_05_neha_kapoor.pdf": {
+        "name": "Neha Kapoor",
+        "email": "neha.kapoor@example.com",
+        "phone": "+91 9123456780",
+        "education": [
+            "B.Sc. Computer Science",
+            "City College",
+            "2021"
+        ],
+        "skills": [
+            "Python",
+            "Machine Learning",
+            "SQL",
+            "Tableau",
+            "Linux"
+        ],
+        "experience": [
+            "Junior Data Scientist",
+            "DataVista",
+            "2022 - Present",
+            "Worked on predictive analytics and reporting."
+        ],
+        "certifications": [
+            "Machine Learning Specialization"
+        ],
+        "projects": [
+            "Demand Forecasting",
+            "Developed a demand forecasting model.",
+            "Analytics Report",
+            "Prepared business analytics reports using Tableau."
+        ]
+    },
+    "resume_05_neha_kapoor.docx": {
+        "name": "Neha Kapoor",
+        "email": "neha.kapoor@example.com",
+        "phone": "+91 9123456780",
+        "education": [
+            "B.Sc. Computer Science",
+            "City College",
+            "2021"
+        ],
+        "skills": [
+            "Python",
+            "Machine Learning",
+            "SQL",
+            "Tableau",
+            "Linux"
+        ],
+        "experience": [
+            "Junior Data Scientist",
+            "DataVista",
+            "2022 - Present",
+            "Worked on predictive analytics and reporting."
+        ],
+        "certifications": [
+            "Machine Learning Specialization"
+        ],
+        "projects": [
+            "Demand Forecasting",
+            "Developed a demand forecasting model.",
+            "Analytics Report",
+            "Prepared business analytics reports using Tableau."
+        ]
+    }
+}
