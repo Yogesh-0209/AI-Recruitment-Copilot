@@ -1,0 +1,77 @@
+{
+    "jobs": [
+        {
+            "job_id": "JOB001",
+            "title": "Senior Machine Learning Engineer",
+            "required_skills": [
+                "Python",
+                "TensorFlow",
+                "Kubernetes",
+                "AWS",
+                "SQL"
+            ],
+            "experience_required": 4,
+            "education_required": "M.S. Computer Science",
+            "description": "We are looking for a Senior Machine Learning Engineer with strong Python, TensorFlow, SQL, AWS and Kubernetes skills."
+        },
+        {
+            "job_id": "JOB002",
+            "title": "Data Scientist",
+            "required_skills": [
+                "Python",
+                "SQL",
+                "Machine Learning",
+                "Pandas",
+                "NumPy",
+                "Data Analysis"
+            ],
+            "experience_required": 2,
+            "education_required": "M.S. Computer Science",
+            "description": "Looking for a Data Scientist with Python, SQL, machine learning and data analysis experience."
+        },
+        {
+            "job_id": "JOB003",
+            "title": "Python Developer",
+            "required_skills": [
+                "Python",
+                "Django",
+                "SQL",
+                "Git",
+                "REST API"
+            ],
+            "experience_required": 2,
+            "education_required": "B.Tech Computer Science",
+            "description": "Python Developer required with Django, SQL, Git and REST API experience."
+        },
+        {
+            "job_id": "JOB004",
+            "title": "AI Engineer",
+            "required_skills": [
+                "Python",
+                "Machine Learning",
+                "Deep Learning",
+                "TensorFlow",
+                "PyTorch",
+                "NLP"
+            ],
+            "experience_required": 3,
+            "education_required": "M.S. Computer Science",
+            "description": "AI Engineer responsible for developing machine learning and deep learning solutions using Python and modern AI frameworks."
+        },
+        {
+            "job_id": "JOB005",
+            "title": "Data Analyst",
+            "required_skills": [
+                "Python",
+                "SQL",
+                "Pandas",
+                "NumPy",
+                "Data Analysis",
+                "Power BI"
+            ],
+            "experience_required": 2,
+            "education_required": "B.Tech Computer Science",
+            "description": "Data Analyst required to analyze business data using Python, SQL, Pandas, NumPy and visualization tools."
+        }
+    ]
+}

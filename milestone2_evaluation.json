@@ -1,0 +1,74 @@
+{
+    "evaluation_cases": [
+        {
+            "candidate": "Sarah Johnson",
+            "job_id": "JOB001",
+            "expected_match": true
+        },
+        {
+            "candidate": "Sarah Johnson",
+            "job_id": "JOB002",
+            "expected_match": true
+        },
+        {
+            "candidate": "Sarah Johnson",
+            "job_id": "JOB003",
+            "expected_match": false
+        },
+
+        {
+            "candidate": "Rahul Mehta",
+            "job_id": "JOB003",
+            "expected_match": true
+        },
+        {
+            "candidate": "Rahul Mehta",
+            "job_id": "JOB004",
+            "expected_match": false
+        },
+
+        {
+            "candidate": "Ananya Verma",
+            "job_id": "JOB002",
+            "expected_match": true
+        },
+        {
+            "candidate": "Ananya Verma",
+            "job_id": "JOB004",
+            "expected_match": false
+        },
+
+        {
+            "candidate": "Vikram Singh",
+            "job_id": "JOB004",
+            "expected_match": true
+        },
+        {
+            "candidate": "Vikram Singh",
+            "job_id": "JOB005",
+            "expected_match": false
+        },
+
+        {
+            "candidate": "Neha Kapoor",
+            "job_id": "JOB005",
+            "expected_match": true
+        },
+        {
+            "candidate": "Neha Kapoor",
+            "job_id": "JOB004",
+            "expected_match": false
+        },
+
+        {
+            "candidate": "Ananya Sharma",
+            "job_id": "JOB002",
+            "expected_match": true
+        },
+        {
+            "candidate": "Ananya Sharma",
+            "job_id": "JOB004",
+            "expected_match": false
+        }
+    ]
+}

@@ -42,6 +42,7 @@
             "Built a machine learning model to predict sales using Python."
         ]
     },
+
     "resume_01_sarah_johnson.docx": {
         "name": "Sarah Johnson",
         "email": "sarah.johnson@example.com",
@@ -85,6 +86,7 @@
             "Built a machine learning model to predict sales using Python."
         ]
     },
+
     "resume_02_rahul_mehta.pdf": {
         "name": "Rahul Mehta",
         "email": "rahul.mehta@example.com",
@@ -126,6 +128,7 @@
             "Created a Python application for personal finance tracking."
         ]
     },
+
     "resume_02_rahul_mehta.docx": {
         "name": "Rahul Mehta",
         "email": "rahul.mehta@example.com",
@@ -167,6 +170,7 @@
             "Created a Python application for personal finance tracking."
         ]
     },
+
     "resume_03_ananya_verma.pdf": {
         "name": "Ananya Verma",
         "email": "ananya.verma@example.com",
@@ -204,6 +208,7 @@
             "Created an interactive dashboard for sales analytics."
         ]
     },
+
     "resume_03_ananya_verma.docx": {
         "name": "Ananya Verma",
         "email": "ananya.verma@example.com",
@@ -241,6 +246,7 @@
             "Created an interactive dashboard for sales analytics."
         ]
     },
+
     "resume_04_vikram_singh.pdf": {
         "name": "Vikram Singh",
         "email": "vikram.singh@example.com",
@@ -274,6 +280,7 @@
             "Developed a conversational assistant for customer support."
         ]
     },
+
     "resume_04_vikram_singh.docx": {
         "name": "Vikram Singh",
         "email": "vikram.singh@example.com",
@@ -307,6 +314,7 @@
             "Developed a conversational assistant for customer support."
         ]
     },
+
     "resume_05_neha_kapoor.pdf": {
         "name": "Neha Kapoor",
         "email": "neha.kapoor@example.com",
@@ -339,6 +347,7 @@
             "Prepared business analytics reports using Tableau."
         ]
     },
+
     "resume_05_neha_kapoor.docx": {
         "name": "Neha Kapoor",
         "email": "neha.kapoor@example.com",
@@ -370,5 +379,52 @@
             "Analytics Report",
             "Prepared business analytics reports using Tableau."
         ]
-    }
+    },
+    "resume_06.pdf": {
+    "name": "Ananya Sharma",
+    "email": "ananya.sharma@example.com",
+    "phone": "+91 9876543210",
+    "education": [
+        "M.S. Computer Science",
+        "ABC University",
+        "2024",
+        "B.Tech Computer Science",
+        "XYZ University",
+        "2022"
+    ],
+    "skills": [
+        "Python",
+        "Java",
+        "SQL",
+        "Machine Learning",
+        "Data Science",
+        "Data Analysis",
+        "TensorFlow",
+        "Pandas",
+        "NumPy",
+        "AWS",
+        "Git",
+        "GitHub"
+    ],
+    "experience": [
+        "Software Engineer",
+        "ABC Technologies",
+        "2024 - Present",
+        "Developed machine learning applications using Python and SQL.",
+        "Data Science Intern",
+        "XYZ Analytics",
+        "2022 - 2024",
+        "Worked on data analysis and machine learning projects."
+    ],
+    "certifications": [
+        "AWS Certified Cloud Practitioner",
+        "Python for Data Science"
+    ],
+    "projects": [
+        "AI Recruitment System",
+        "Developed an AI-based system for resume screening and candidate matching.",
+        "Sales Prediction System",
+        "Built a machine learning model to predict sales using Python."
+    ]
+}
 }

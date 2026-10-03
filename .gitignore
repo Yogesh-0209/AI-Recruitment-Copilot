@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# Candidate-generated data
+data/candidates/
+data/voice_screenings/
+data/resumes/*.pdf
+data/resumes/*.docx
