@@ -4,14 +4,16 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.exc import SQLAlchemyError
 
-from database.connection import SessionLocal
+from database.connection import SessionLocal, Base, engine
+from database import models
 from database.models import Candidate, Job, Application
 
 
 # ============================================================
 # FASTAPI APPLICATION
 # ============================================================
-
+# Create database tables automatically on deployment/startup
+Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="AI Recruitment Copilot API",
     description=(
