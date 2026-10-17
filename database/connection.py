@@ -1,4 +1,6 @@
 import os
+from urllib.parse import urlsplit, urlunsplit
+
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import URL
@@ -9,7 +11,10 @@ load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
-    # Render PostgreSQL connection
+    # Clean accidental spaces/quotes from Render environment variable.
+    DATABASE_URL = DATABASE_URL.strip().strip('"').strip("'")
+
+    # Normalize PostgreSQL scheme for SQLAlchemy.
     if DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace(
             "postgres://",
