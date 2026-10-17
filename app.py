@@ -78,7 +78,10 @@ from chatbot import build_context, get_response
 # FASTAPI CONNECTION
 # ============================================================
 
-FASTAPI_BASE_URL = "http://127.0.0.1:8000"
+FASTAPI_BASE_URL = os.getenv(
+    "FASTAPI_BASE_URL",
+    "http://127.0.0.1:8000"
+)
 
 
 def call_fastapi(endpoint, method="GET", payload=None):
