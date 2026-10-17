@@ -12,3 +12,4 @@ spacy
 SpeechRecognition
 pyttsx3
 psycopg2-binary
+huggingface_hub
