@@ -10,4 +10,4 @@ pymupdf
 python-docx
 spacy
 SpeechRecognition
-pyttsx3
+pyttsx3psycopg2-binary

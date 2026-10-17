@@ -1,5 +1,4 @@
 import os
-
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import URL
@@ -7,20 +6,41 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
-DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "")
-DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
-DB_PORT = int(os.getenv("DB_PORT", "3306"))
-DB_NAME = os.getenv("DB_NAME", "ai_recruitment_copilot")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-database_url = URL.create(
-    drivername="mysql+pymysql",
-    username=DB_USER,
-    password=DB_PASSWORD,
-    host=DB_HOST,
-    port=DB_PORT,
-    database=DB_NAME,
-)
+if DATABASE_URL:
+    # Render PostgreSQL connection
+    if DATABASE_URL.startswith("postgres://"):
+        DATABASE_URL = DATABASE_URL.replace(
+            "postgres://",
+            "postgresql+psycopg2://",
+            1,
+        )
+    elif DATABASE_URL.startswith("postgresql://"):
+        DATABASE_URL = DATABASE_URL.replace(
+            "postgresql://",
+            "postgresql+psycopg2://",
+            1,
+        )
+
+    database_url = DATABASE_URL
+
+else:
+    # Local MySQL connection
+    DB_USER = os.getenv("DB_USER", "root")
+    DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+    DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
+    DB_PORT = int(os.getenv("DB_PORT", "3306"))
+    DB_NAME = os.getenv("DB_NAME", "ai_recruitment_copilot")
+
+    database_url = URL.create(
+        drivername="mysql+pymysql",
+        username=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT,
+        database=DB_NAME,
+    )
 
 engine = create_engine(
     database_url,
@@ -47,5 +67,5 @@ def get_db():
 
 def test_connection():
     with engine.connect() as connection:
-        result = connection.execute(text("SELECT DATABASE()"))
+        result = connection.execute(text("SELECT 1"))
         return result.scalar()
