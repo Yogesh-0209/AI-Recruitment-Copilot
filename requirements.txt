@@ -1,1 +1,13 @@
+streamlit
 requests
+pandas
+sqlalchemy
+pymysql
+python-dotenv
+fastapi
+uvicorn
+pymupdf
+python-docx
+spacy
+SpeechRecognition
+pyttsx3
