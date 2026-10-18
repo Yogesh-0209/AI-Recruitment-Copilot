@@ -42,7 +42,6 @@
             "Built a machine learning model to predict sales using Python."
         ]
     },
-
     "resume_01_sarah_johnson.docx": {
         "name": "Sarah Johnson",
         "email": "sarah.johnson@example.com",
@@ -86,7 +85,6 @@
             "Built a machine learning model to predict sales using Python."
         ]
     },
-
     "resume_02_rahul_mehta.pdf": {
         "name": "Rahul Mehta",
         "email": "rahul.mehta@example.com",
@@ -128,7 +126,6 @@
             "Created a Python application for personal finance tracking."
         ]
     },
-
     "resume_02_rahul_mehta.docx": {
         "name": "Rahul Mehta",
         "email": "rahul.mehta@example.com",
@@ -170,7 +167,6 @@
             "Created a Python application for personal finance tracking."
         ]
     },
-
     "resume_03_ananya_verma.pdf": {
         "name": "Ananya Verma",
         "email": "ananya.verma@example.com",
@@ -208,7 +204,6 @@
             "Created an interactive dashboard for sales analytics."
         ]
     },
-
     "resume_03_ananya_verma.docx": {
         "name": "Ananya Verma",
         "email": "ananya.verma@example.com",
@@ -246,7 +241,6 @@
             "Created an interactive dashboard for sales analytics."
         ]
     },
-
     "resume_04_vikram_singh.pdf": {
         "name": "Vikram Singh",
         "email": "vikram.singh@example.com",
@@ -280,7 +274,6 @@
             "Developed a conversational assistant for customer support."
         ]
     },
-
     "resume_04_vikram_singh.docx": {
         "name": "Vikram Singh",
         "email": "vikram.singh@example.com",
@@ -314,7 +307,6 @@
             "Developed a conversational assistant for customer support."
         ]
     },
-
     "resume_05_neha_kapoor.pdf": {
         "name": "Neha Kapoor",
         "email": "neha.kapoor@example.com",
@@ -347,7 +339,6 @@
             "Prepared business analytics reports using Tableau."
         ]
     },
-
     "resume_05_neha_kapoor.docx": {
         "name": "Neha Kapoor",
         "email": "neha.kapoor@example.com",
@@ -381,50 +372,277 @@
         ]
     },
     "resume_06.pdf": {
-    "name": "Ananya Sharma",
-    "email": "ananya.sharma@example.com",
-    "phone": "+91 9876543210",
-    "education": [
-        "M.S. Computer Science",
-        "ABC University",
-        "2024",
-        "B.Tech Computer Science",
-        "XYZ University",
-        "2022"
-    ],
-    "skills": [
-        "Python",
-        "Java",
-        "SQL",
-        "Machine Learning",
-        "Data Science",
-        "Data Analysis",
-        "TensorFlow",
-        "Pandas",
-        "NumPy",
-        "AWS",
-        "Git",
-        "GitHub"
-    ],
-    "experience": [
-        "Software Engineer",
-        "ABC Technologies",
-        "2024 - Present",
-        "Developed machine learning applications using Python and SQL.",
-        "Data Science Intern",
-        "XYZ Analytics",
-        "2022 - 2024",
-        "Worked on data analysis and machine learning projects."
-    ],
-    "certifications": [
-        "AWS Certified Cloud Practitioner",
-        "Python for Data Science"
-    ],
-    "projects": [
-        "AI Recruitment System",
-        "Developed an AI-based system for resume screening and candidate matching.",
-        "Sales Prediction System",
-        "Built a machine learning model to predict sales using Python."
-    ]
-}
+        "name": "Ananya Sharma",
+        "email": "ananya.sharma@example.com",
+        "phone": "+91 9876543210",
+        "education": [
+            "M.S. Computer Science",
+            "ABC University",
+            "2024",
+            "B.Tech Computer Science",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "Java",
+            "SQL",
+            "Machine Learning",
+            "Data Science",
+            "Data Analysis",
+            "TensorFlow",
+            "Pandas",
+            "NumPy",
+            "AWS",
+            "Git",
+            "GitHub"
+        ],
+        "experience": [
+            "Software Engineer",
+            "ABC Technologies",
+            "2024 - Present",
+            "Developed machine learning applications using Python and SQL.",
+            "Data Science Intern",
+            "XYZ Analytics",
+            "2022 - 2024",
+            "Worked on data analysis and machine learning projects."
+        ],
+        "certifications": [
+            "AWS Certified Cloud Practitioner",
+            "Python for Data Science"
+        ],
+        "projects": [
+            "AI Recruitment System",
+            "Developed an AI-based system for resume screening and candidate matching.",
+            "Sales Prediction System",
+            "Built a machine learning model to predict sales using Python."
+        ]
+    },
+    "Ananya_Sharma_Resume.pdf": {
+        "name": "Ananya Sharma",
+        "email": "ananya.sharma@example.com",
+        "phone": "+91 9876543210",
+        "education": [
+            "M.S. Computer Science",
+            "ABC University",
+            "2024",
+            "B.Tech Computer Science",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "SQL",
+            "Machine Learning",
+            "Data Science",
+            "Data Analysis",
+            "TensorFlow",
+            "Pandas",
+            "NumPy",
+            "AWS",
+            "Git",
+            "GitHub"
+        ],
+        "experience": [
+            "Machine Learning Engineer",
+            "ABC Technologies",
+            "2024 - Present",
+            "Developed machine learning applications using Python and TensorFlow; built data pipelines and deployed models on AWS.",
+            "Data Science Intern",
+            "XYZ Analytics",
+            "2022 - 2024",
+            "Worked on predictive analytics, data preparation, model evaluation, and business data analysis."
+        ],
+        "certifications": [
+            "AWS Certified Cloud Practitioner",
+            "Python for Data Science"
+        ],
+        "projects": [
+            "AI Recruitment System",
+            "Developed an AI-based system for resume screening and candidate matching.",
+            "Sales Prediction System",
+            "Built a machine learning model to predict sales using Python and Pandas."
+        ]
+    },
+    "Rohit_Verma_Resume.pdf": {
+        "name": "Rohit Verma",
+        "email": "rohit.verma@example.com",
+        "phone": "+91 9876543215",
+        "education": [
+            "M.S. Data Science",
+            "ABC University",
+            "2024",
+            "B.Tech Information Technology",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "SQL",
+            "Pandas",
+            "NumPy",
+            "Machine Learning",
+            "Data Analysis",
+            "Statistics",
+            "Power BI",
+            "Excel",
+            "Git"
+        ],
+        "experience": [
+            "Data Scientist",
+            "Insight Analytics",
+            "2024 - Present",
+            "Built predictive models and analytical dashboards using Python, SQL, Pandas, and Power BI.",
+            "Data Analyst Intern",
+            "DataWorks",
+            "2022 - 2024",
+            "Performed data cleaning, exploratory analysis, reporting, and visualization for business datasets."
+        ],
+        "certifications": [
+            "Microsoft Power BI Data Analyst",
+            "Python for Data Science"
+        ],
+        "projects": [
+            "Customer Churn Prediction",
+            "Built a machine learning model to identify customers at risk of churn.",
+            "Business Analytics Dashboard",
+            "Created an interactive Power BI dashboard for sales and customer analysis."
+        ]
+    },
+    "Neha_Kapoor_Resume.pdf": {
+        "name": "Neha Kapoor",
+        "email": "neha.kapoor@example.com",
+        "phone": "+91 9876543212",
+        "education": [
+            "M.S. Artificial Intelligence",
+            "ABC University",
+            "2024",
+            "B.Tech Computer Science",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning",
+            "TensorFlow",
+            "PyTorch",
+            "NLP",
+            "Computer Vision",
+            "SQL",
+            "Pandas",
+            "Git"
+        ],
+        "experience": [
+            "AI Engineer",
+            "Future AI Labs",
+            "2024 - Present",
+            "Developed deep learning and NLP solutions using Python, TensorFlow, PyTorch, and transformer-based models.",
+            "AI Research Intern",
+            "VisionTech",
+            "2022 - 2024",
+            "Implemented machine learning prototypes for text classification and computer vision applications."
+        ],
+        "certifications": [
+            "Deep Learning Specialization",
+            "NLP with Python"
+        ],
+        "projects": [
+            "Intelligent Candidate Matcher",
+            "Built an NLP-based system to compare candidate profiles with job requirements.",
+            "Text Classification Engine",
+            "Developed a deep learning classifier for categorizing customer support requests."
+        ]
+    },
+    "Rahul_Mehta_Resume.pdf": {
+        "name": "Rahul Mehta",
+        "email": "rahul.mehta@example.com",
+        "phone": "+91 9876543213",
+        "education": [
+            "M.S. Computer Science",
+            "ABC University",
+            "2024",
+            "B.Tech Computer Engineering",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "Django",
+            "REST API",
+            "SQL",
+            "Git",
+            "GitHub",
+            "FastAPI",
+            "PostgreSQL",
+            "Docker",
+            "Linux",
+            "JavaScript"
+        ],
+        "experience": [
+            "Python Developer",
+            "TechNova Solutions",
+            "2024 - Present",
+            "Developed REST APIs and backend services using Python, Django, FastAPI, PostgreSQL, and SQLAlchemy.",
+            "Software Developer Intern",
+            "CodeLabs",
+            "2022 - 2024",
+            "Built backend modules, database integrations, API endpoints, and automated testing workflows."
+        ],
+        "certifications": [
+            "Python Developer Certification",
+            "REST API Development"
+        ],
+        "projects": [
+            "Recruitment ATS API",
+            "Developed REST APIs for candidate applications, job management, and recruitment status tracking.",
+            "Employee Management System",
+            "Built a Django-based web application with PostgreSQL database integration."
+        ]
+    },
+    "Sarah_Johnson_Resume.pdf": {
+        "name": "Sarah Johnson",
+        "email": "sarah.johnson@example.com",
+        "phone": "+91 9876543214",
+        "education": [
+            "M.S. Data Analytics",
+            "ABC University",
+            "2024",
+            "B.Sc. Statistics",
+            "XYZ University",
+            "2022"
+        ],
+        "skills": [
+            "Python",
+            "SQL",
+            "Pandas",
+            "NumPy",
+            "Data Analysis",
+            "Power BI",
+            "Tableau",
+            "Excel",
+            "Statistics",
+            "Machine Learning"
+        ],
+        "experience": [
+            "Data Analyst",
+            "Global Insights",
+            "2024 - Present",
+            "Analyzed business datasets using SQL and Python and created Power BI dashboards for decision support.",
+            "Analytics Intern",
+            "MarketData Labs",
+            "2022 - 2024",
+            "Prepared datasets, performed statistical analysis, generated reports, and supported business intelligence projects."
+        ],
+        "certifications": [
+            "Microsoft Power BI Data Analyst",
+            "Advanced Excel Analytics"
+        ],
+        "projects": [
+            "Sales Analytics Dashboard",
+            "Developed a Power BI dashboard to analyze revenue, products, regions, and sales trends.",
+            "Customer Segmentation",
+            "Applied Python and statistical techniques to segment customers based on behavior."
+        ]
+    }
 }

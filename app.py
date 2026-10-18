@@ -6,6 +6,12 @@ import requests
 from pathlib import Path
 from datetime import datetime
 
+# pyright: reportMissingImports=false
+try:
+    import plotly.express as px
+except ImportError:  # pragma: no cover - optional dependency for chart rendering
+    px = None
+
 import pandas as pd
 import streamlit as st
 
@@ -78,10 +84,7 @@ from chatbot import build_context, get_response
 # FASTAPI CONNECTION
 # ============================================================
 
-FASTAPI_BASE_URL = os.getenv(
-    "FASTAPI_BASE_URL",
-    "http://127.0.0.1:8000"
-)
+FASTAPI_BASE_URL = "http://127.0.0.1:8000"
 
 
 def call_fastapi(endpoint, method="GET", payload=None):
@@ -110,7 +113,7 @@ def call_fastapi(endpoint, method="GET", payload=None):
 # ============================================================
 
 def get_or_create_db_candidate(profile, filename=None):
-    """Create or update the current parsed candidate in MySQL."""
+    """Create or update the current parsed candidate in the database."""
     db = SessionLocal()
     try:
         name = (profile.get("name") or "Unknown Candidate").strip()
@@ -184,7 +187,7 @@ def get_or_create_db_candidate(profile, filename=None):
 
 
 def get_db_job(external_job_id):
-    """Map JOB001/JOB002/... from JSON to the MySQL Job record."""
+    """Map JOB001/JOB002/... from JSON to the database Job record."""
     db = SessionLocal()
     try:
         return (
@@ -767,6 +770,75 @@ body,
 .chat-card p {
     color: #475569 !important;
 }
+/* ============================================================
+   CHAT MESSAGE TEXT FIX
+   ============================================================ */
+
+[data-testid="stChatMessage"] {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+[data-testid="stChatMessage"] * {
+    color: #0f172a !important;
+}
+
+[data-testid="stChatMessage"] p {
+    color: #0f172a !important;
+}
+/* ============================================================
+   CHAT INPUT LIGHT THEME
+   ============================================================ */
+
+[data-testid="stChatInput"] {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+}
+
+[data-testid="stChatInput"] textarea {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    caret-color: #0f172a !important;
+}
+
+[data-testid="stChatInput"] textarea::placeholder {
+    color: #64748b !important;
+    opacity: 1 !important;
+}
+
+[data-testid="stChatInput"] > div {
+    background-color: #ffffff !important;
+}
+/* ============================================================
+   STREAMLIT BOTTOM CHAT AREA - LIGHT THEME
+   ============================================================ */
+
+[data-testid="stBottom"] {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+}
+
+[data-testid="stBottom"] > div {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+}
+
+[data-testid="stBottomBlockContainer"] {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+}
+
+[data-testid="stChatInput"] {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+}
+
+[data-testid="stChatInput"] > div,
+[data-testid="stChatInput"] form {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+}
 
 /* ============================================================
    STREAMLIT WIDGET LABELS
@@ -948,33 +1020,15 @@ div[data-baseweb="select"] > div {
     color: #0f172a !important;
 }
 
-/* Native Streamlit chat and fixed bottom area */
-[data-testid="stBottom"],
-[data-testid="stBottom"] > div,
-[data-testid="stBottomBlockContainer"] {
-    background: #f8fafc !important;
-    background-color: #f8fafc !important;
-}
-
 [data-testid="stChatInput"] {
     background: #ffffff !important;
-    background-color: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06) !important;
-}
-
-[data-testid="stChatInput"] > div {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
     border-radius: 12px !important;
 }
 
 [data-testid="stChatInput"] textarea {
     background: #ffffff !important;
-    background-color: #ffffff !important;
     color: #0f172a !important;
-    -webkit-text-fill-color: #0f172a !important;
 }
 
 [data-testid="stChatInput"] textarea::placeholder {
@@ -982,27 +1036,10 @@ div[data-baseweb="select"] > div {
     opacity: 1 !important;
 }
 
-[data-testid="stChatInput"] button {
-    background: #2563eb !important;
-    color: #ffffff !important;
-    border-radius: 8px !important;
-}
-
 [data-testid="stChatMessage"] {
     background: #ffffff !important;
-    background-color: #ffffff !important;
     color: #0f172a !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 12px !important;
-}
-
-[data-testid="stChatMessage"] *,
-[data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] * {
-    color: #0f172a !important;
-}
-
-[data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
-    color: #0f172a !important;
+    border-radius: 12px;
 }
 
 [data-testid="stAlert"] {
@@ -1300,6 +1337,7 @@ def load_ground_truth():
 def find_ground_truth(
     filename,
     ground_truth,
+    profile=None,
 ):
 
     if not ground_truth:
@@ -1326,6 +1364,23 @@ def find_ground_truth(
         ):
 
             return value
+
+    # Fallback: match the extracted candidate identity when the
+    # uploaded filename differs from the demo ground-truth filename.
+    # This keeps validation working for renamed/re-uploaded resumes.
+    if profile:
+        profile_email = str(profile.get("email", "")).strip().lower()
+        profile_name = str(profile.get("name", "")).strip().lower()
+
+        for value in ground_truth.values():
+            expected_email = str(value.get("email", "")).strip().lower()
+            expected_name = str(value.get("name", "")).strip().lower()
+
+            if profile_email and expected_email and profile_email == expected_email:
+                return value
+
+            if profile_name and expected_name and profile_name == expected_name:
+                return value
 
     return None
 
@@ -1547,12 +1602,12 @@ def show_welcome_page():
 
     login_col, signup_col = st.columns(2)
     with login_col:
-        if st.button("🔐 Login to Portal", type="primary", use_container_width=True, key="welcome_login"):
+        if st.button("🔐 Login to Portal", type="primary", width="stretch", key="welcome_login"):
             st.session_state.auth_page = "login"
             st.session_state.login_captcha = generate_captcha()
             st.rerun()
     with signup_col:
-        if st.button("✨ Create Free Account", use_container_width=True, key="welcome_signup"):
+        if st.button("✨ Create Free Account", width="stretch", key="welcome_signup"):
             st.session_state.auth_page = "signup"
             st.session_state.signup_captcha = generate_captcha()
             st.rerun()
@@ -1666,7 +1721,7 @@ def show_login_page():
 
         login_clicked = st.button(
             "🔐 Login",
-            use_container_width=True,
+            width="stretch",
             type="primary",
         )
 
@@ -1674,7 +1729,7 @@ def show_login_page():
 
         signup_clicked = st.button(
             "📝 Sign Up",
-            use_container_width=True,
+            width="stretch",
         )
 
     if login_clicked:
@@ -1737,7 +1792,7 @@ def show_login_page():
 
     if st.button(
         "🔑 Forgot Password?",
-        use_container_width=True,
+        width="stretch",
     ):
 
         st.session_state.auth_page = "forgot"
@@ -1841,7 +1896,7 @@ def show_signup_page():
 
         create_account = st.button(
             "✅ Create Account",
-            use_container_width=True,
+            width="stretch",
             type="primary",
         )
 
@@ -1849,7 +1904,7 @@ def show_signup_page():
 
         back_login = st.button(
             "⬅️ Back to Login",
-            use_container_width=True,
+            width="stretch",
         )
 
     if create_account:
@@ -1971,7 +2026,7 @@ def show_forgot_password_page():
 
         if st.button(
             "⬅️ Back to Login",
-            use_container_width=True,
+            width="stretch",
         ):
             st.session_state.auth_page = "login"
             st.rerun()
@@ -2005,7 +2060,7 @@ def show_forgot_password_page():
         verify_button = st.button(
             "🔍 Verify Identity",
             type="primary",
-            use_container_width=True,
+            width="stretch",
         )
 
         if verify_button:
@@ -2048,7 +2103,7 @@ def show_forgot_password_page():
         reset_button = st.button(
             "🔄 Reset Password",
             type="primary",
-            use_container_width=True,
+            width="stretch",
         )
 
         if reset_button:
@@ -2076,7 +2131,7 @@ def show_forgot_password_page():
 
     if st.button(
         "⬅️ Back to Login",
-        use_container_width=True,
+        width="stretch",
     ):
 
         st.session_state.auth_page = "login"
@@ -2165,7 +2220,7 @@ with st.sidebar:
             ("📊 Final Reports", "📊 Final Reports"),
         ]
         for button_label, section_name in recruiter_buttons:
-            if st.button(button_label, use_container_width=True, key=f"side_{section_name}"):
+            if st.button(button_label, width="stretch", key=f"side_{section_name}"):
                 st.session_state.recruiter_section = section_name
                 st.rerun()
     else:
@@ -2208,7 +2263,7 @@ with st.sidebar:
 
     if st.button(
         "🚪 Logout",
-        use_container_width=True,
+        width="stretch",
     ):
 
         st.session_state.authenticated = False
@@ -2311,7 +2366,7 @@ if is_recruiter():
                 rows = []
                 for c in candidates:
                     rows.append({"ID": c.id, "Name": c.name, "Email": c.email or "", "Experience (Years)": c.experience_years or 0, "Resume": c.resume_filename or "Not uploaded"})
-                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+                st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
             else:
                 st.info("No candidates are available yet.")
         finally:
@@ -2344,7 +2399,7 @@ if is_recruiter():
 
                 st.dataframe(
                     pd.DataFrame(rows),
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True,
                 )
             else:
@@ -2378,7 +2433,7 @@ if is_recruiter():
 
                 st.dataframe(
                     pd.DataFrame(rows),
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True,
                 )
             else:
@@ -2396,7 +2451,7 @@ if is_recruiter():
                     candidate = db.query(Candidate).filter(Candidate.id == screening.candidate_id).first()
                     job = db.query(Job).filter(Job.id == screening.job_id).first()
                     rows.append({"ID": screening.id, "Candidate": candidate.name if candidate else f"Candidate #{screening.candidate_id}", "Job": job.title if job else f"Job #{screening.job_id}", "Clarity (%)": screening.clarity_score, "Confidence (%)": screening.confidence_score, "Relevance (%)": screening.relevance_score, "Overall (%)": screening.overall_score, "Recommendation": screening.recommendation})
-                st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+                st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
             else:
                 st.info("No voice screenings yet. Candidate voice-screening results will appear here.")
         finally:
@@ -2448,11 +2503,11 @@ if is_recruiter():
                     row["Rank"] = rank
 
                 ranking_df = pd.DataFrame(ranking_rows)[["Rank", "Application ID", "Candidate", "Job", "Matching (%)", "Interview (%)", "Voice (%)", "Final Score (%)", "Decision"]]
-                st.dataframe(ranking_df, use_container_width=True, hide_index=True)
+                st.dataframe(ranking_df, width="stretch", hide_index=True)
 
                 st.divider()
                 st.subheader("⚖️ Recruiter Decision Controls")
-                st.caption("Shortlist, Hold, or Reject an application. The decision is saved in MySQL.")
+                st.caption("Shortlist, Hold, or Reject an application. The decision is saved in the database.")
 
                 for rank, row in enumerate(ranking_rows, start=1):
                     app_id = row["Application ID"]
@@ -2481,7 +2536,7 @@ if is_recruiter():
                             if st.button(
                                 "✅ Shortlist",
                                 key=f"shortlist_{app_id}",
-                                use_container_width=True,
+                                width="stretch",
                             ):
                                 api_result = call_fastapi(
                                     f"/ats/applications/{app_id}/status",
@@ -2501,7 +2556,7 @@ if is_recruiter():
                             if st.button(
                                 "⏸️ Hold",
                                 key=f"hold_{app_id}",
-                                use_container_width=True,
+                                width="stretch",
                             ):
                                 api_result = call_fastapi(
                                     f"/ats/applications/{app_id}/status",
@@ -2521,7 +2576,7 @@ if is_recruiter():
                             if st.button(
                                 "❌ Reject",
                                 key=f"reject_{app_id}",
-                                use_container_width=True,
+                                width="stretch",
                             ):
                                 api_result = call_fastapi(
                                     f"/ats/applications/{app_id}/status",
@@ -2606,7 +2661,7 @@ if is_recruiter():
                 ]
                 st.dataframe(
                     report_df,
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True,
                 )
 
@@ -2617,36 +2672,36 @@ if is_recruiter():
 
                 with chart_col1:
                     st.markdown("**Application Decisions**")
-                    decision_df = pd.DataFrame(
-                        {
-                            "Status": [
-                                "Applied",
-                                "Shortlisted",
-                                "Hold",
-                                "Rejected",
-                            ],
-                            "Count": [
-                                pending,
-                                shortlisted,
-                                on_hold,
-                                rejected,
-                            ],
-                        }
-                    ).set_index("Status")
-                    st.bar_chart(decision_df)
+                    decision_rows = [
+                        ("Applied", pending),
+                        ("Shortlisted", shortlisted),
+                        ("Hold", on_hold),
+                        ("Rejected", rejected),
+                    ]
+                    decision_chart_df = pd.DataFrame(
+                        decision_rows,
+                        columns=["Decision", "Applications"],
+                    ).set_index("Decision")
+                    st.bar_chart(
+                        decision_chart_df,
+                        width="stretch",
+                    )
 
                 with chart_col2:
                     st.markdown("**Top Candidate Scores**")
-                    score_chart = pd.DataFrame(
-                        [
-                            {
-                                "Candidate": row["Candidate"],
-                                "Final Score": row["Final Score (%)"],
-                            }
-                            for row in ranking_rows[:10]
-                        ]
-                    ).set_index("Candidate")
-                    st.bar_chart(score_chart)
+                    top_scores = [
+                        {
+                            "Candidate": str(row["Candidate"]),
+                            "Final Score (%)": float(row["Final Score (%)"]),
+                        }
+                        for row in ranking_rows[:10]
+                    ]
+                    if top_scores:
+                        top_scores_df = pd.DataFrame(top_scores).set_index("Candidate")
+                        st.bar_chart(
+                            top_scores_df,
+                            width="stretch",
+                        )
 
                 st.divider()
                 st.subheader("📌 Recruitment Summary")
@@ -2676,7 +2731,7 @@ if is_recruiter():
                     data=csv_data,
                     file_name="final_recruitment_report.csv",
                     mime="text/csv",
-                    use_container_width=True,
+                    width="stretch",
                 )
 
                 st.caption(
@@ -3040,6 +3095,7 @@ else:
             expected_profile = find_ground_truth(
                 uploaded_file.name,
                 ground_truth,
+                profile,
             )
 
             if expected_profile is None:
@@ -3165,14 +3221,10 @@ else:
                         }
                     )
 
-                field_df = pd.DataFrame(
-                    field_data
-                )
-
+                field_chart_df = pd.DataFrame(field_data).set_index("Field")
                 st.bar_chart(
-                    field_df.set_index(
-                        "Field"
-                    )
+                    field_chart_df,
+                    width="stretch",
                 )
 
                 for field, matched in results.items():
@@ -3480,31 +3532,18 @@ else:
                         "📊 Matching Score Breakdown"
                     )
 
-                    score_breakdown = pd.DataFrame(
-                        {
-                            "Component": [
-                                "Skills",
-                                "Experience",
-                                "Education",
-                            ],
-                            "Score": [
-                                match_result[
-                                    "skill_score"
-                                ],
-                                match_result[
-                                    "experience_score"
-                                ],
-                                match_result[
-                                    "education_score"
-                                ],
-                            ],
-                        }
-                    )
-
+                    breakdown_rows = [
+                        ("Skills", float(match_result["skill_score"])),
+                        ("Experience", float(match_result["experience_score"])),
+                        ("Education", float(match_result["education_score"])),
+                    ]
+                    breakdown_df = pd.DataFrame(
+                        breakdown_rows,
+                        columns=["Component", "Score (%)"],
+                    ).set_index("Component")
                     st.bar_chart(
-                        score_breakdown.set_index(
-                            "Component"
-                        )
+                        breakdown_df,
+                        width="stretch",
                     )
 
                     st.caption(
@@ -3791,7 +3830,7 @@ else:
 
                 st.dataframe(
                     ranking_df,
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True,
                 )
 
@@ -3810,18 +3849,13 @@ else:
                         "📊 Candidate Hiring Score Comparison"
                     )
 
-                    chart_df = ranking_df[
-                        [
-                            "Candidate",
-                            "Hiring Score (%)",
-                        ]
-                    ].set_index(
-                        "Candidate"
+                    hiring_chart_df = (
+                        ranking_df[["Candidate", "Hiring Score (%)"]]
+                        .set_index("Candidate")
                     )
-
                     st.bar_chart(
-                        chart_df,
-                        use_container_width=True,
+                        hiring_chart_df,
+                        width="stretch",
                     )
 
                 ranking_csv = ranking_df.to_csv(
@@ -4012,7 +4046,7 @@ else:
 
                     st.dataframe(
                         evaluation_df,
-                        use_container_width=True,
+                        width="stretch",
                         hide_index=True,
                     )
 
@@ -4066,7 +4100,7 @@ else:
     st.markdown('<div id="candidate-applications"></div>', unsafe_allow_html=True)
     st.header("📋 Job Applications")
     st.write(
-        "Apply for the selected job and store the application in MySQL. "
+        "Apply for the selected job and store the application in the database. "
         "Candidates can apply once per job and track their application status."
     )
 
@@ -4086,7 +4120,7 @@ else:
 
             if db_job is None:
                 st.error(
-                    f"❌ Job {application_job_id or 'N/A'} was not found in MySQL."
+                    f"❌ Job {application_job_id or 'N/A'} was not found in the database."
                 )
             else:
                 db_candidate_id = get_or_create_db_candidate(
@@ -4136,13 +4170,13 @@ else:
                 else:
                     st.success(
                         "Your parsed resume profile is ready. "
-                        "Submit the application to save it in MySQL."
+                        "Submit the application to save it in the database."
                     )
 
                     if st.button(
                         "🚀 Apply for This Job",
                         type="primary",
-                        use_container_width=True,
+                        width="stretch",
                         key="apply_selected_job",
                     ):
                         application = Application(
@@ -4197,7 +4231,7 @@ else:
 
                     st.dataframe(
                         pd.DataFrame(application_rows),
-                        use_container_width=True,
+                        width="stretch",
                         hide_index=True,
                     )
                 else:
@@ -4222,7 +4256,7 @@ else:
     st.header("🎙️ Voice Screening")
     st.write(
         "Record a short spoken response, transcribe it, evaluate clarity, "
-        "confidence and job relevance, and save the screening result in MySQL."
+        "confidence and job relevance, and save the screening result in the database."
     )
 
     voice_profile = st.session_state.get("candidate_profile")
@@ -4241,7 +4275,7 @@ else:
 
             if voice_db_job is None:
                 st.error(
-                    f"❌ Job {voice_job_id or 'N/A'} was not found in MySQL."
+                    f"❌ Job {voice_job_id or 'N/A'} was not found in the database."
                 )
             else:
                 voice_candidate_id = get_or_create_db_candidate(
@@ -4281,7 +4315,7 @@ else:
                     if st.button(
                         "🤖 Transcribe & Evaluate Voice",
                         type="primary",
-                        use_container_width=True,
+                        width="stretch",
                         key="process_voice_screening",
                     ):
                         temp_dir = Path("data") / "voice_screenings"
@@ -4315,7 +4349,7 @@ else:
                                 )
 
                             st.success(
-                                "✅ Voice screening completed and saved to MySQL."
+                                "✅ Voice screening completed and saved to the database."
                             )
 
                             st.subheader("📝 Transcript")
@@ -4394,7 +4428,7 @@ else:
 
             if db_job is None:
                 st.error(
-                    f"❌ Job {interview_job.get('job_id', 'N/A')} was not found in MySQL. "
+                    f"❌ Job {interview_job.get('job_id', 'N/A')} was not found in the database. "
                     "Run the database job seeding/setup step first."
                 )
             else:
@@ -4419,7 +4453,7 @@ else:
 
                 st.success(
                     f"Candidate connected to interview system. "
-                    f"Candidate ID: {db_candidate_id} • MySQL Job ID: {db_job.id}"
+                    f"Candidate ID: {db_candidate_id} • Database Job ID: {db_job.id}"
                 )
 
                 if ai_configured():
@@ -4453,7 +4487,7 @@ else:
                     start_interview_clicked = st.button(
                         "▶️ Start / Restart Interview",
                         type="primary",
-                        use_container_width=True,
+                        width="stretch",
                     )
 
                 if start_interview_clicked:
@@ -4544,7 +4578,7 @@ else:
                     submit_answer_clicked = st.button(
                         "➡️ Submit Answer & Generate Next Question",
                         type="primary",
-                        use_container_width=True,
+                        width="stretch",
                     )
 
                     if submit_answer_clicked:
@@ -4672,7 +4706,7 @@ else:
 
                         st.success(
                             f"✅ Live adaptive interview completed. "
-                            f"{len(results)} answers evaluated and saved to MySQL."
+                            f"{len(results)} answers evaluated and saved to the database."
                         )
 
                         result_rows = []
@@ -4708,7 +4742,7 @@ else:
 
                         st.dataframe(
                             results_df,
-                            use_container_width=True,
+                            width="stretch",
                             hide_index=True,
                         )
 
@@ -4784,7 +4818,7 @@ def show_recruitment_chatbot():
             unsafe_allow_html=True,
         )
     with chat_action_col:
-        if st.button("Clear", key="clear_recruitment_chat", use_container_width=True):
+        if st.button("Clear", key="clear_recruitment_chat", width="stretch"):
             st.session_state.chatbot_messages = [
                 {
                     "role": "assistant",

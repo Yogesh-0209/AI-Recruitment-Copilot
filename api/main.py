@@ -1,412 +1,258 @@
-from typing import Optional
+import json
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
-from database.connection import SessionLocal, Base, engine
-from database import models
-from database.models import Candidate, Job, Application
+from database.connection import Base, SessionLocal, engine
+from database.models import Application, Candidate, Job
 
-
-# ============================================================
-# FASTAPI APPLICATION
-# ============================================================
-# Create database tables automatically on deployment/startup
-Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="AI Recruitment Copilot API",
-    description=(
-        "REST API backend for the AI Recruitment Copilot. "
-        "Provides ATS, candidate, job and application services."
-    ),
     version="1.0.0",
 )
 
 
-# ============================================================
-# REQUEST SCHEMAS
-# ============================================================
-
-class CandidateResponse(BaseModel):
-    id: int
-    name: str
-    email: Optional[str] = None
-    phone: Optional[str] = None
-    location: Optional[str] = None
-    experience_years: Optional[float] = None
-    skills: Optional[str] = None
-    resume_filename: Optional[str] = None
+DEFAULT_JOB_FILE = Path(__file__).resolve().parent.parent / "jobs" / "job_profiles.json"
 
 
-class ApplicationCreate(BaseModel):
-    candidate_id: int
-    job_id: int
+def _list_value(value):
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [str(value)]
 
 
-class ApplicationStatusUpdate(BaseModel):
-    status: str
+def seed_default_jobs():
+    """Create the demo jobs in a fresh cloud database without duplicating them."""
+    if not DEFAULT_JOB_FILE.exists():
+        return 0
+
+    with DEFAULT_JOB_FILE.open("r", encoding="utf-8") as file:
+        data = json.load(file)
+
+    jobs = data.get("jobs", []) if isinstance(data, dict) else data
+    if not isinstance(jobs, list):
+        return 0
+
+    db: Session = SessionLocal()
+    created = 0
+    try:
+        for item in jobs:
+            external_id = str(item.get("job_id") or "").strip()
+            title = str(item.get("title") or "Untitled Job").strip()
+            if not external_id or not title:
+                continue
+
+            existing = db.query(Job).filter(Job.job_id == external_id).first()
+            if existing:
+                # Keep cloud data stable, but fill any missing seed fields.
+                if not existing.required_skills:
+                    existing.required_skills = json.dumps(_list_value(item.get("required_skills")))
+                if existing.experience_required in (None, 0):
+                    existing.experience_required = float(item.get("experience_required") or 0)
+                if not existing.education_required:
+                    existing.education_required = item.get("education_required")
+                if not existing.location:
+                    existing.location = item.get("location")
+                if not existing.description:
+                    existing.description = item.get("description")
+                if not existing.status:
+                    existing.status = "Open"
+                continue
+
+            db.add(
+                Job(
+                    job_id=external_id,
+                    title=title,
+                    description=item.get("description") or "",
+                    required_skills=json.dumps(_list_value(item.get("required_skills"))),
+                    experience_required=float(item.get("experience_required") or 0),
+                    education_required=item.get("education_required") or "",
+                    location=item.get("location") or "",
+                    status=item.get("status") or "Open",
+                )
+            )
+            created += 1
+
+        db.commit()
+        return created
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
 
 
-# ============================================================
-# BASIC HEALTH ENDPOINTS
-# ============================================================
+@app.on_event("startup")
+def initialize_database():
+    # Render creates a fresh PostgreSQL database. Create tables and then seed
+    # the demo jobs so candidate matching, applications, interviews and voice
+    # screening can immediately find JOB001-JOB005.
+    Base.metadata.create_all(bind=engine)
+    seed_default_jobs()
+
 
 @app.get("/")
 def root():
     return {
         "message": "AI Recruitment Copilot API is running",
-        "status": "success",
-        "version": "1.0.0",
+        "status": "ok",
     }
 
 
 @app.get("/health")
-def health_check():
-    return {
-        "status": "healthy",
-        "service": "AI Recruitment Copilot API",
-        "database": "MySQL",
-    }
-
-
-# ============================================================
-# ATS - CANDIDATES
-# ============================================================
-
-@app.get("/ats/candidates")
-def list_candidates():
-    """
-    Return candidates stored in the MySQL database.
-    """
-
+def health():
     db = SessionLocal()
-
     try:
-        candidates = (
-            db.query(Candidate)
-            .order_by(Candidate.updated_at.desc())
-            .all()
-        )
-
-        result = []
-
-        for candidate in candidates:
-            result.append(
-                {
-                    "id": candidate.id,
-                    "name": candidate.name,
-                    "email": candidate.email,
-                    "phone": candidate.phone,
-                    "location": candidate.location,
-                    "experience_years": candidate.experience_years,
-                    "skills": candidate.skills,
-                    "resume_filename": candidate.resume_filename,
-                }
-            )
-
-        return {
-            "total": len(result),
-            "candidates": result,
-        }
-
-    except SQLAlchemyError as exc:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Database error: {exc}",
-        )
-
+        db.query(Job).count()
+        return {"status": "healthy", "database": "connected"}
     finally:
         db.close()
 
 
-# ============================================================
-# ATS - JOBS
-# ============================================================
+@app.get("/ats/candidates")
+def get_candidates():
+    db = SessionLocal()
+    try:
+        candidates = db.query(Candidate).order_by(Candidate.updated_at.desc()).all()
+        return {
+            "candidates": [
+                {
+                    "id": c.id,
+                    "name": c.name,
+                    "email": c.email,
+                    "experience_years": c.experience_years or 0,
+                    "resume_filename": c.resume_filename,
+                }
+                for c in candidates
+            ],
+            "total": len(candidates),
+        }
+    finally:
+        db.close()
+
 
 @app.get("/ats/jobs")
-def list_jobs():
-    """
-    Return jobs stored in the MySQL database.
-    """
-
+def get_jobs():
     db = SessionLocal()
-
     try:
-        jobs = (
-            db.query(Job)
-            .order_by(Job.created_at.desc())
-            .all()
-        )
-
-        result = []
-
-        for job in jobs:
-            result.append(
+        jobs = db.query(Job).order_by(Job.id.asc()).all()
+        return {
+            "jobs": [
                 {
                     "id": job.id,
                     "job_id": job.job_id,
                     "title": job.title,
-                    "description": job.description,
-                    "required_skills": job.required_skills,
-                    "experience_required": job.experience_required,
-                    "education_required": job.education_required,
-                    "location": job.location,
-                    "status": job.status,
+                    "description": job.description or "",
+                    "required_skills": _list_value(json.loads(job.required_skills) if job.required_skills else []),
+                    "experience_required": job.experience_required or 0,
+                    "education_required": job.education_required or "",
+                    "location": job.location or "",
+                    "status": job.status or "Open",
                 }
-            )
-
-        return {
-            "total": len(result),
-            "jobs": result,
+                for job in jobs
+            ],
+            "total": len(jobs),
         }
-
-    except SQLAlchemyError as exc:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Database error: {exc}",
-        )
-
     finally:
         db.close()
 
 
-# ============================================================
-# ATS - APPLICATIONS
-# ============================================================
-
 @app.get("/ats/applications")
-def list_applications():
-    """
-    Return applications from the existing MySQL database.
-    """
-
+def get_applications():
     db = SessionLocal()
-
     try:
-        applications = (
-            db.query(Application)
-            .order_by(Application.applied_at.desc())
-            .all()
-        )
-
-        result = []
-
+        applications = db.query(Application).order_by(Application.applied_at.desc()).all()
+        rows = []
         for application in applications:
-            result.append(
+            candidate = application.candidate
+            job = application.job
+            rows.append(
                 {
                     "id": application.id,
                     "candidate_id": application.candidate_id,
-                    "candidate_name": (
-                        application.candidate.name
-                        if application.candidate
-                        else None
-                    ),
-                    "candidate_email": (
-                        application.candidate.email
-                        if application.candidate
-                        else None
-                    ),
-                    "job_id": application.job_id,
-                    "job_title": (
-                        application.job.title
-                        if application.job
-                        else None
-                    ),
-                    "status": application.status,
-                    "applied_at": (
-                        application.applied_at.isoformat()
-                        if application.applied_at
-                        else None
-                    ),
+                    "candidate_name": candidate.name if candidate else "",
+                    "candidate_email": candidate.email if candidate else "",
+                    "job_id": job.job_id if job else application.job_id,
+                    "job_title": job.title if job else "",
+                    "status": application.status or "Applied",
+                    "applied_at": str(application.applied_at) if application.applied_at else "",
                 }
             )
-
-        return {
-            "total": len(result),
-            "applications": result,
-        }
-
-    except SQLAlchemyError as exc:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Database error: {exc}",
-        )
-
+        return {"applications": rows, "total": len(rows)}
     finally:
         db.close()
 
 
-# ============================================================
-# ATS - CREATE APPLICATION
-# ============================================================
-
 @app.post("/ats/applications")
-def create_application(application_data: ApplicationCreate):
-    """
-    Create a new job application in MySQL.
-    """
+def create_application(payload: dict):
+    candidate_id = payload.get("candidate_id")
+    job_id = payload.get("job_id")
+
+    if not candidate_id or not job_id:
+        raise HTTPException(status_code=400, detail="candidate_id and job_id are required")
 
     db = SessionLocal()
-
     try:
-        candidate = (
-            db.query(Candidate)
-            .filter(Candidate.id == application_data.candidate_id)
-            .first()
-        )
-
+        candidate = db.query(Candidate).filter(Candidate.id == int(candidate_id)).first()
+        job = db.query(Job).filter(Job.id == int(job_id)).first()
         if not candidate:
-            raise HTTPException(
-                status_code=404,
-                detail="Candidate not found.",
-            )
-
-        job = (
-            db.query(Job)
-            .filter(Job.id == application_data.job_id)
-            .first()
-        )
-
+            raise HTTPException(status_code=404, detail="Candidate not found")
         if not job:
-            raise HTTPException(
-                status_code=404,
-                detail="Job not found.",
-            )
+            raise HTTPException(status_code=404, detail="Job not found")
 
         existing = (
             db.query(Application)
             .filter(
-                Application.candidate_id
-                == application_data.candidate_id,
-                Application.job_id
-                == application_data.job_id,
+                Application.candidate_id == candidate.id,
+                Application.job_id == job.id,
             )
             .first()
         )
-
         if existing:
-            raise HTTPException(
-                status_code=409,
-                detail="Candidate has already applied for this job.",
-            )
+            return {
+                "message": "Application already exists",
+                "application": {"id": existing.id, "status": existing.status},
+            }
 
-        new_application = Application(
-            candidate_id=application_data.candidate_id,
-            job_id=application_data.job_id,
-            status="Applied",
+        application = Application(
+            candidate_id=candidate.id,
+            job_id=job.id,
+            status=payload.get("status") or "Applied",
         )
-
-        db.add(new_application)
+        db.add(application)
         db.commit()
-        db.refresh(new_application)
-
+        db.refresh(application)
         return {
-            "message": "Application created successfully.",
-            "application": {
-                "id": new_application.id,
-                "candidate_id": new_application.candidate_id,
-                "candidate_name": candidate.name,
-                "job_id": new_application.job_id,
-                "job_title": job.title,
-                "status": new_application.status,
-            },
+            "message": "Application created successfully",
+            "application": {"id": application.id, "status": application.status},
         }
-
-    except HTTPException:
-        db.rollback()
-        raise
-
-    except SQLAlchemyError as exc:
-        db.rollback()
-
-        raise HTTPException(
-            status_code=500,
-            detail=f"Database error: {exc}",
-        )
-
     finally:
         db.close()
 
 
-# ============================================================
-# ATS - UPDATE APPLICATION STATUS
-# ============================================================
-
 @app.put("/ats/applications/{application_id}/status")
-def update_application_status(
-    application_id: int,
-    status_data: ApplicationStatusUpdate,
-):
-    """
-    Update an application's recruitment status.
-
-    Examples:
-    Applied
-    Shortlisted
-    Hold
-    Rejected
-    """
-
-    allowed_statuses = {
-        "Applied",
-        "Shortlisted",
-        "Hold",
-        "Rejected",
-    }
-
-    status = status_data.status.strip()
-
-    if status not in allowed_statuses:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                "Invalid status. Use one of: "
-                "Applied, Shortlisted, Hold, Rejected."
-            ),
-        )
+def update_application_status(application_id: int, payload: dict):
+    status = str(payload.get("status") or "").strip()
+    allowed = {"Applied", "Shortlisted", "Hold", "Rejected"}
+    if status not in allowed:
+        raise HTTPException(status_code=400, detail=f"Status must be one of: {', '.join(sorted(allowed))}")
 
     db = SessionLocal()
-
     try:
-        application = (
-            db.query(Application)
-            .filter(Application.id == application_id)
-            .first()
-        )
-
+        application = db.query(Application).filter(Application.id == application_id).first()
         if not application:
-            raise HTTPException(
-                status_code=404,
-                detail="Application not found.",
-            )
+            raise HTTPException(status_code=404, detail="Application not found")
 
         application.status = status
-
         db.commit()
         db.refresh(application)
-
         return {
-            "message": "Application status updated successfully.",
-            "application": {
-                "id": application.id,
-                "candidate_id": application.candidate_id,
-                "job_id": application.job_id,
-                "status": application.status,
-            },
+            "message": "Application status updated successfully",
+            "application_id": application.id,
+            "status": application.status,
         }
-
-    except HTTPException:
-        db.rollback()
-        raise
-
-    except SQLAlchemyError as exc:
-        db.rollback()
-
-        raise HTTPException(
-            status_code=500,
-            detail=f"Database error: {exc}",
-        )
-
     finally:
         db.close()
